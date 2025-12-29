@@ -38,4 +38,19 @@ urlpatterns = [
     path('hod/Course/Edit/<str:id>', hod_views.EDIT_COURSE, name='edit_course'),
     path('hod/Course/Update', hod_views.UPDATE_COURSE, name='update_course'),
     path('hod/Course/Delete/<str:id>', hod_views.DELETE_COURSE, name='delete_course'),
+
+    path('hod/Subject/Add', hod_views.ADD_SUBJECT, name='add_subject'),
+    path('hod/Subject/View', hod_views.VIEW_SUBJECT, name='view_subject'),
+    path('hod/Subject/Edit/<str:id>', hod_views.EDIT_SUBJECT, name='edit_subject'),
+    path('hod/Subject/Update', hod_views.UPDATE_SUBJECT, name='update_subject'),
+    path('hod/Subject/Delete/<str:id>', hod_views.DELETE_SUBJECT, name='delete_subject'),
+
+    path('hod/Batch/Add', hod_views.ADD_BATCH, name='add_batch'),
+    path('hod/Batch/View', hod_views.VIEW_BATCH, name='view_batch'),
+    path('hod/Batch/Edit/<str:id>', hod_views.EDIT_BATCH, name='edit_batch'),
+    path('hod/Batch/Update', hod_views.UPDATE_BATCH, name='update_batch'),
+    path('hod/Batch/Delete/<str:id>', hod_views.DELETE_BATCH, name='delete_batch'),
+
+    #this is staffs urls
+    path('staff/Home', staff_views.HOME, name='staff_home'),
     ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

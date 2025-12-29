@@ -1,0 +1,101 @@
+<script>
+$(document).ready(function() {
+
+    // Pie chart - All details
+    var optionsAll = {
+        series: [{{ student_count }}, {{ staff_count }}, {{ subject_count }}, {{ course_count }}],
+        chart: {
+            width: '100%',
+            height: 350,
+            type: 'pie',
+        },
+        labels: ['Students', 'Staffs', 'Subjects', 'Courses'],
+        responsive: [{
+            breakpoint: 768, // tablet breakpoint
+            options: {
+                chart: { width: '100%' },
+                legend: { position: 'bottom' }
+            }
+        }]
+    };
+    var chartAll = new ApexCharts(document.querySelector("#All_details"), optionsAll);
+    chartAll.render();
+
+    // Bar chart - Student gender
+    if ($('#stud_gender').length > 0) {
+        var optionsBar = {
+            chart: { type: 'bar', height: 350, width: '100%', stacked: true, toolbar: { show: false } },
+            dataLabels: { enabled: false },
+            plotOptions: { bar: { columnWidth: '45%' } },
+            series: [
+                { name: "Boys", color: '#fdbb38', data: [{{ student_gender_male }}] },
+                { name: "Girls", color: '#19affb', data: [{{ student_gender_female }}] }
+            ],
+            labels: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
+            xaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { labels: { style: { colors: '#777' } }, axisBorder: { show: false }, axisTicks: { show: false } },
+            title: { text: '', align: 'left', style: { fontSize: '18px' } }
+        };
+        var chartBar = new ApexCharts(document.querySelector('#stud_gender'), optionsBar);
+        chartBar.render();
+    }
+
+    // Donut chart - Student and staff
+    var optionsDonut = {
+        series: [{{ student_count }}, {{ staff_count }}],
+        chart: { type: 'donut', height: 350, width: '100%' },
+        labels: ['Students', 'Staffs'],
+        responsive: [{
+            breakpoint: 768,
+            options: {
+                chart: { width: '100%' },
+                legend: { position: 'bottom' }
+            }
+        }]
+    };
+    var chartDonut = new ApexCharts(document.querySelector("#stud_staff"), optionsDonut);
+    chartDonut.render();
+
+    //course and subject
+     var optionsCourseSubject = {
+    series: [{{ course_count }}, {{ subject_count }}],
+    chart: {
+        height: 350,      // same height as other charts
+        width: '100%',    // responsive full width
+        type: 'donut',
+    },
+    colors: ['#FF6B6B', '#4ECDC4'], // Vibrant Coral Red and Fresh Teal
+    plotOptions: {
+        pie: {
+            startAngle: -90,
+            endAngle: 270
+        }
+    },
+    dataLabels: {
+        enabled: false
+    },
+    fill: {
+        type: 'gradient',
+    },
+    legend: {
+        formatter: function(val, opts) {
+            return val + " - " + opts.w.globals.series[opts.seriesIndex]
+        }
+    },
+    title: {
+        text: ''
+    },
+    labels: ['Courses', 'Subjects'],
+    responsive: [{
+        breakpoint: 768, // tablet/mobile breakpoint
+        options: {
+            chart: { width: '100%' },
+            legend: { position: 'bottom' }
+        }
+    }]
+};
+
+var chartCourseSubject = new ApexCharts(document.querySelector("#course_subject"), optionsCourseSubject);
+chartCourseSubject.render();
+});
+</script>
