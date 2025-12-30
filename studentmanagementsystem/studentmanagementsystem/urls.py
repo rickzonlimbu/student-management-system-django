@@ -51,6 +51,11 @@ urlpatterns = [
     path('hod/Batch/Update', hod_views.UPDATE_BATCH, name='update_batch'),
     path('hod/Batch/Delete/<str:id>', hod_views.DELETE_BATCH, name='delete_batch'),
 
+    path('hod/Staff/Send_Notification', hod_views.STAFF_SEND_NOTIFICATION, name='staff_send_notification'),
+    path('hod/Staff/Save_Notification', hod_views.SAVE_STAFF_NOTIFICATION, name='save_staff_notification'),
+
     #this is staffs urls
     path('staff/Home', staff_views.HOME, name='staff_home'),
+    path('staff/Notifications', staff_views.NOTIFICATION, name='notifications'),
+    path('staff/mark_as_done/<str:status>',staff_views.STAFF_NOTIFICATION_MARK_AS_DONE, name='staff_notification_mark_as_done'),
     ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

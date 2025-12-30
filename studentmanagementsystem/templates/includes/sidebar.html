@@ -48,7 +48,7 @@
                         </ul>
                      </li>
                      <li>
-                     <a href="holiday.html"><i class="fas fa-bell"></i><span>Send Staff Notification</span></a>
+                     <a href="{% url 'staff_send_notification' %}"><i class="fas fa-bell"></i><span>Send Staff Notification</span></a>
                      </li>
                      <li>
                      <a href="holiday.html"><i class="fas fa-bell"></i><span>Send Student Notification</span></a>
@@ -94,6 +94,9 @@
                      </li>
                        <li class="{% active_link 'hod_home' 'active' %}">
                         <a href="{% url 'hod_home' %}"><i class="fas fa-comment"></i> <span>Send Feedback</span></a>
+                     </li>
+                          <li class="{% active_link 'notifications' 'active' %}">
+                        <a href="{% url 'notifications' %}"><i class="fas fa-bell"></i> <span>Notifications</span></a>
                      </li>
                        <li>
                      <a href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i> <span>Logout</span></a>

@@ -1,7 +1,7 @@
 from django.db.models.fields import return_None
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject
+from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification
 from django.contrib import messages
 
 @login_required(login_url='/')
@@ -440,3 +440,29 @@ def DELETE_BATCH(request,id):
     batch.delete()
     messages.success(request,'Batch Are Successfully Deleted')
     return redirect('view_batch')
+
+
+def STAFF_SEND_NOTIFICATION(request):
+    staff = Staff.objects.all()
+    see_notification = Staff_Notification.objects.all().order_by('-id')[0:5]
+
+    context = {
+        'staff':staff,
+        'see_notification':see_notification,
+    }
+    return render(request, 'hod/staff_notification.html',context)
+
+
+def SAVE_STAFF_NOTIFICATION(request):
+    if request.method == "POST":
+        staff_id = request.POST.get('staff_id')
+        message = request.POST.get('message')
+
+        staff = Staff.objects.get(admin = staff_id)
+        notification = Staff_Notification(
+            staff_id = staff,
+            message = message,
+        )
+        notification.save()
+        messages.success(request,'Notification Are Successfully Sent')
+    return redirect('staff_send_notification')
