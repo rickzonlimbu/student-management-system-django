@@ -1,6 +1,6 @@
+from django.contrib import messages
 from django.shortcuts import render,redirect
-from smsapp.models import Staff, Staff_Notification
-
+from smsapp.models import Staff, Staff_Notification, Staff_Leave
 
 def HOME(request):
     return render(request,'staff/home.html')
@@ -24,3 +24,33 @@ def STAFF_NOTIFICATION_MARK_AS_DONE(request,status):
     notification.status = 1
     notification.save()
     return redirect('notifications')
+
+
+def STAFF_APPLY_LEAVE(request):
+    staff = Staff.objects.filter(admin = request.user.id)
+    for i in staff:
+        staff_id = i.id
+
+        staff_leave_history = Staff_Leave.objects.filter(staff_id = staff_id)
+
+        context = {
+            'staff_leave_history':staff_leave_history,
+        }
+    return render(request, 'staff/apply_leave.html',context)
+
+
+def STAFF_APPLY_LEAVE_SAVE(request):
+    if request.method == "POST":
+        leave_date = request.POST.get('leave_date')
+        leave_reason = request.POST.get('leave_reason')
+
+        staff = Staff.objects.get(admin = request.user.id)
+
+        leave = Staff_Leave(
+            staff_id = staff,
+            date = leave_date,
+            message = leave_reason,
+        )
+        leave.save()
+        messages.success(request,'Leave Successfully Applied')
+        return redirect('staff_apply_leave')

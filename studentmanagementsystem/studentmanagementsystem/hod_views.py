@@ -1,7 +1,8 @@
 from django.db.models.fields import return_None
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification
+from django.template.context_processors import request
+from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification, Staff_Leave
 from django.contrib import messages
 
 @login_required(login_url='/')
@@ -466,3 +467,27 @@ def SAVE_STAFF_NOTIFICATION(request):
         notification.save()
         messages.success(request,'Notification Are Successfully Sent')
     return redirect('staff_send_notification')
+
+
+def Staff_Leave_view(request):
+    staff_leave = Staff_Leave.objects.all()
+
+    context = {
+        'staff_leave':staff_leave,
+    }
+
+    return render(request,'hod/staff_leave.html',context)
+
+
+def Staff_Approve_Leave(request,id):
+    leave = Staff_Leave.objects.get(id=id)
+    leave.status = 1
+    leave.save()
+    return redirect('staff_leave_view')
+
+
+def Staff_Reject_Leave(request,id):
+    leave = Staff_Leave.objects.get(id=id)
+    leave.status = 2
+    leave.save()
+    return redirect('staff_leave_view')
