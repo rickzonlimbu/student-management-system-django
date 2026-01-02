@@ -4,10 +4,10 @@
                <div class="page-header">
                   <div class="row align-items-center">
                      <div class="col">
-                        <h3 class="page-title">Staff Notification</h3>
+                        <h3 class="page-title">Student Notification</h3>
                         <ul class="breadcrumb">
                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                           <li class="breadcrumb-item active">Staff Notification</li>
+                           <li class="breadcrumb-item active">Student Notification</li>
                         </ul>
                      </div>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
@@ -33,7 +33,7 @@
                                     </tr>
                                  </thead>
                                  <tbody>
-                                 {% for i in staff %}
+                                 {% for i in student %}
                                     <tr>
                                        <td>{{i.id}}</td>
                                        <td>
@@ -45,9 +45,10 @@
                                        <td>{{i.admin.email}}</td>
 
                                        <td class="text-right">
-<button type="button" class="btn btn-success" data-toggle="modal" data-target="#send_notification-{{forloop.counter}}">
-Send Staff Notification
-</button>                                       </td>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#send_notification-{{forloop.counter}}">
+                                    Send Student Notification
+                                    </button>
+                                       </td>
                                     </tr>
                                  {% endfor %}
                                  </tbody>
@@ -85,7 +86,7 @@ Send Staff Notification
                                     </tr>
                                  </thead>
                                  <tbody>
-                                 {% for i in see_notification %}
+                                 {% for i in notification %}
                                     <tr>
                                        <td>{{i.message}}</td>
                                         {% if i.status == 0 %}
@@ -115,22 +116,22 @@ Send Staff Notification
 </div>
 
 <!----modal---->
-{% for i in staff %}
+{% for i in student %}
 <div class="modal fade" id="send_notification-{{forloop.counter}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered"> <!-- Added modal-dialog-centered -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="send_notification_modal">Send Staff Notification To {{i.admin.first_name}}&nbsp;{{i.admin.last_name}}</h5>
+        <h5 class="modal-title" id="send_notification_modal">Send Student Notification To {{i.admin.first_name}}&nbsp;{{i.admin.last_name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <form method="post" action="{% url 'save_staff_notification' %}">
+      <form method="post" action="{% url 'save_student_notification' %}">
         {% csrf_token %}
   <div class="form-group">
     <input type="text" class="form-control" name="message" >
-    <input type="text" class="form-control" name="staff_id" value="{{i.admin.id}}" hidden>
+    <input type="text" class="form-control" name="student_id" value="{{i.admin.id}}" hidden>
   </div>
 
 

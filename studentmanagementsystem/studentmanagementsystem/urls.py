@@ -17,8 +17,6 @@ urlpatterns = [
     path('Profile/update', views.PROFILE_UPDATE, name='profile_update'),
 
 
-
-
     #this is hod panel url
     path('hod/Home', hod_views.HOME, name='hod_home'),
     path('hod/Student/Add',hod_views.ADD_STUDENT, name='add_student'),
@@ -53,16 +51,37 @@ urlpatterns = [
 
     path('hod/Staff/Send_Notification', hod_views.STAFF_SEND_NOTIFICATION, name='staff_send_notification'),
     path('hod/Staff/Save_Notification', hod_views.SAVE_STAFF_NOTIFICATION, name='save_staff_notification'),
+    path('hod/Student/send_notification',hod_views.STUDENT_SEND_NOTIFICATION, name='student_send_notification'),
+    path('hod/Staff/save_notification', hod_views.SAVE_STUDENT_NOTIFICATION, name='save_student_notification'),
 
     path('hod/Staff/Leave_view', hod_views.Staff_Leave_view, name='staff_leave_view'),
     path('hod/Staff/approve_leave/<str:id>', hod_views.Staff_Approve_Leave, name='staff_approve_leave'),
     path('hod/Staff/reject_leave/<str:id>', hod_views.Staff_Reject_Leave, name='staff_reject_leave'),
 
-                  #this is staffs urls
+    path('hod/Staff/feedback', hod_views.STAFF_FEEDBACK, name='staff_feedback_reply'),
+    path('hod/Staff/feedback/save', hod_views.STAFF_FEEDBACK_SAVE, name='staff_feedback_reply_save'),
+
+    path('hod/Student/feedback', hod_views.STUDENT_FEEDBACK, name='get_student_feedback'),
+    path('hod/Student/feedback/reply/save', hod_views.REPLY_STUDENT_FEEDBACK, name='reply_student_feedback'),
+
+    #this is staffs urls
     path('staff/Home', staff_views.HOME, name='staff_home'),
+
     path('staff/Notifications', staff_views.NOTIFICATION, name='notifications'),
     path('staff/mark_as_done/<str:status>',staff_views.STAFF_NOTIFICATION_MARK_AS_DONE, name='staff_notification_mark_as_done'),
 
     path('staff/Apply_leave', staff_views.STAFF_APPLY_LEAVE, name='staff_apply_leave'),
     path('staff/Apply_leave_save', staff_views.STAFF_APPLY_LEAVE_SAVE, name='staff_apply_leave_save'),
+
+    path('staff/Feedback', staff_views.STAFF_FEEDBACK, name='staff_feedback'),
+    path('staff/Feedback/Save', staff_views.STAFF_FEEDBACK_SAVE, name='staff_feedback_save'),
+
+    #this is student urls
+    path('student/Home', student_views.HOME, name='student_home'),
+    path('student/Notifications', student_views.STUDENT_NOTIFICATION, name='student_notification'),
+    path('student/mark_as_done/<str:status>', student_views.STUDENT_NOTIFICATION_MARK_AS_DONE,name='student_notification_mark_as_done'),
+
+    path('student/Feedback', student_views.STUDENT_FEEDBACK, name='student_feedback'),
+    path('student/Feedback/Save', student_views.STUDENT_FEEDBACK_SAVE, name='student_feedback_save'),
+
     ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
