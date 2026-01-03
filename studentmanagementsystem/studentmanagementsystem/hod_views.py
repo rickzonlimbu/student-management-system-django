@@ -2,7 +2,7 @@ from django.db.models.fields import return_None
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import request
-from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification, Staff_Leave, Staff_Feedback, Student_Notification, Student_Feedback
+from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification, Staff_Leave, Staff_Feedback, Student_Notification, Student_Feedback, Student_Leave
 from django.contrib import messages
 
 @login_required(login_url='/')
@@ -121,7 +121,7 @@ def UPDATE_STUDENT(request):
         address = request.POST.get('address')
         gender = request.POST.get('gender')
         course_id = request.POST.get('course_id')
-        session_year_id = request.POST.get('session_year_id')
+        batch_year_id = request.POST.get('batch_year_id')
 
         user = CustomUser.objects.get(id = student_id)
 
@@ -144,14 +144,12 @@ def UPDATE_STUDENT(request):
         course = Course.objects.get(id = course_id)
         student.course_id = course
 
-        batch_year = Batch_Year.objects.get(id = session_year_id)
+        batch_year = Batch_Year.objects.get(id = batch_year_id)
         student.batch_year_id = batch_year
 
         student.save()
         messages.success(request,'Record Are Saved Successfully')
         return redirect('view_student')
-
-
 
     return render(request,'hod/edit_student.html')
 
@@ -484,6 +482,7 @@ def Staff_Approve_Leave(request,id):
     leave = Staff_Leave.objects.get(id=id)
     leave.status = 1
     leave.save()
+    messages.success(request,'Staff Leave Approved Successfully')
     return redirect('staff_leave_view')
 
 @login_required(login_url='/')
@@ -491,9 +490,35 @@ def Staff_Reject_Leave(request,id):
     leave = Staff_Leave.objects.get(id=id)
     leave.status = 2
     leave.save()
+    messages.error(request,'Staff Leave Rejected Successfully')
     return redirect('staff_leave_view')
 
+@login_required(login_url='/')
+def STUDENT_LEAVE_VIEW(request):
+    student_leave = Student_Leave.objects.all()
 
+    context = {
+        'student_leave':student_leave,
+    }
+    return render(request,'hod/student_leave.html',context)
+
+@login_required(login_url='/')
+def STUDENT_APPROVE_LEAVE(request,id):
+    student_leave = Student_Leave.objects.get(id=id)
+    student_leave.status = 1
+    student_leave.save()
+    messages.success(request,'Student Leave Approved Successfully')
+    return redirect('student_leave_view')
+
+@login_required(login_url='/')
+def STUDENT_REJECT_LEAVE(request,id):
+    student_leave = Student_Leave.objects.get(id=id)
+    student_leave.status = 2
+    student_leave.save()
+    messages.error(request,'Student Leave Rejected Successfully')
+    return redirect('student_leave_view')
+
+@login_required(login_url='/')
 def STAFF_FEEDBACK(request):
     feedback = Staff_Feedback.objects.all()
     feedback_history = Staff_Feedback.objects.all().order_by('-id')[0:5]
@@ -504,7 +529,7 @@ def STAFF_FEEDBACK(request):
     }
     return render(request,'hod/staff_feedback.html',context)
 
-
+@login_required(login_url='/')
 def STAFF_FEEDBACK_SAVE(request):
     if request.method == "POST":
         feedback_id = request.POST.get('feedback_id')
@@ -518,6 +543,7 @@ def STAFF_FEEDBACK_SAVE(request):
 
         return redirect('staff_feedback_reply')
 
+@login_required(login_url='/')
 def STUDENT_FEEDBACK(request):
     feedback = Student_Feedback.objects.all()
     feedback_history = Student_Feedback.objects.all().order_by('-id')[0:5]
@@ -527,6 +553,7 @@ def STUDENT_FEEDBACK(request):
     }
     return render(request,'hod/student_feedback.html',context)
 
+@login_required(login_url='/')
 def REPLY_STUDENT_FEEDBACK(request):
     if request.method == "POST":
         feedback_id = request.POST.get('feedback_id')
@@ -539,7 +566,7 @@ def REPLY_STUDENT_FEEDBACK(request):
         messages.success(request,'Feedback Reply Sent Successfully')
         return redirect('get_student_feedback')
 
-
+@login_required(login_url='/')
 def STUDENT_SEND_NOTIFICATION(request):
     student = Student.objects.all()
     notification = Student_Notification.objects.all()
@@ -549,7 +576,7 @@ def STUDENT_SEND_NOTIFICATION(request):
     }
     return render(request,'hod/student_notification.html',context)
 
-
+@login_required(login_url='/')
 def SAVE_STUDENT_NOTIFICATION(request):
     if request.method == "POST":
         message = request.POST.get('message')

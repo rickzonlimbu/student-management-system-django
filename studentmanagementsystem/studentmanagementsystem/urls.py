@@ -58,6 +58,10 @@ urlpatterns = [
     path('hod/Staff/approve_leave/<str:id>', hod_views.Staff_Approve_Leave, name='staff_approve_leave'),
     path('hod/Staff/reject_leave/<str:id>', hod_views.Staff_Reject_Leave, name='staff_reject_leave'),
 
+    path('hod/Student/leave_view', hod_views.STUDENT_LEAVE_VIEW, name='student_leave_view'),
+    path('hod/Student/approve_leave/<str:id>', hod_views.STUDENT_APPROVE_LEAVE, name='student_approve_leave'),
+    path('hod/Student/reject_leave/<str:id>', hod_views.STUDENT_REJECT_LEAVE, name='student_reject_leave'),
+
     path('hod/Staff/feedback', hod_views.STAFF_FEEDBACK, name='staff_feedback_reply'),
     path('hod/Staff/feedback/save', hod_views.STAFF_FEEDBACK_SAVE, name='staff_feedback_reply_save'),
 
@@ -76,6 +80,10 @@ urlpatterns = [
     path('staff/Feedback', staff_views.STAFF_FEEDBACK, name='staff_feedback'),
     path('staff/Feedback/Save', staff_views.STAFF_FEEDBACK_SAVE, name='staff_feedback_save'),
 
+    path('staff/Take_Attendance', staff_views.STAFF_TAKE_ATTENDANCE, name='staff_take_attendance'),
+    path('staff/Save_attendance', staff_views.STAFF_SAVE_ATTENDANCE, name='staff_save_attendance'),
+    path('staff/View_Attendance', staff_views.STAFF_VIEW_ATTENDANCE, name='staff_view_attendance'),
+
     #this is student urls
     path('student/Home', student_views.HOME, name='student_home'),
     path('student/Notifications', student_views.STUDENT_NOTIFICATION, name='student_notification'),
@@ -83,5 +91,12 @@ urlpatterns = [
 
     path('student/Feedback', student_views.STUDENT_FEEDBACK, name='student_feedback'),
     path('student/Feedback/Save', student_views.STUDENT_FEEDBACK_SAVE, name='student_feedback_save'),
+
+    path('student/apply_for_leave', student_views.STUDENT_LEAVE, name='student_leave'),
+    path('student/leave_save',student_views.STUDENT_LEAVE_SAVE, name='student_leave_save'),
+
+    path('student/View_Attendance', student_views.STUDENT_VIEW_ATTENDANCE, name='student_view_attendance'),
+
+
 
     ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

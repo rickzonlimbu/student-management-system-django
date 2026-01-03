@@ -1,7 +1,8 @@
-from pyexpat.errors import messages
-
+from django.contrib import messages
 from django.shortcuts import render,redirect
-from smsapp.models import Student, Student_Notification, Student_Feedback
+from smsapp.models import Student, Student_Notification, Student_Feedback, Student_Leave, Subject, Attendance, Attendance_Report
+
+
 
 def HOME(request):
     return render(request,'student/home.html')
@@ -49,3 +50,57 @@ def STUDENT_FEEDBACK_SAVE(request):
         )
         feedbacks.save()
         return redirect('student_feedback')
+
+
+def STUDENT_LEAVE(request):
+    student = Student.objects.filter(admin = request.user.id)
+    for i in student:
+        student_id = i.id
+
+        student_leave_history = Student_Leave.objects.filter(student_id = student_id)
+
+        context = {
+            'student_leave_history':student_leave_history,
+        }
+    return render(request,'student/apply_leave.html',context)
+
+
+def STUDENT_LEAVE_SAVE(request):
+    if request.method == "POST":
+        leave_date = request.POST.get('leave_date')
+        leave_reason = request.POST.get('leave_reason')
+
+        student_id = Student.objects.get(admin = request.user.id)
+
+        student_leave = Student_Leave(
+            student_id = student_id,
+            date = leave_date,
+            message = leave_reason,
+        )
+        student_leave.save()
+        messages.success(request,'Leave Applied Successfully')
+        return redirect('student_leave')
+
+
+def STUDENT_VIEW_ATTENDANCE(request):
+    student = Student.objects.get(admin = request.user.id)
+    subjects = Subject.objects.filter(course = student.course_id)
+    action = request.GET.get('action')
+
+    get_subject = None
+    attendance_report = None
+    if action is not None:
+        if request.method == "POST":
+            subject_id = request.POST.get('subject_id')
+            get_subject = Subject.objects.get(id = subject_id)
+
+            attendance_report = Attendance_Report.objects.filter(student_id = student, attendance_id__subject_id = subject_id)
+
+    context = {
+        'subjects':subjects,
+        'action':action,
+        'get_subject':get_subject,
+        'attendance_report':attendance_report,
+    }
+
+    return render(request,'student/view_attendance.html',context)

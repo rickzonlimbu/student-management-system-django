@@ -112,6 +112,35 @@ class Student_Feedback(models.Model):
     def __str__(self):
         return self.student_id.admin.first_name + " " + self.student_id.admin.last_name
 
+class Student_Leave(models.Model):
+    student_id = models.ForeignKey(Student,on_delete=models.CASCADE)
+    date = models.CharField(max_length=100)
+    message = models.TextField()
+    status = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.student_id.admin.first_name + self.student_id.admin.last_name
+
+class Attendance(models.Model):
+    subject_id = models.ForeignKey(Subject,on_delete=models.DO_NOTHING)
+    attendance_date = models.DateField()
+    batch_year_id = models.ForeignKey(Batch_Year, on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.subject_id.name
+
+class Attendance_Report(models.Model):
+    student_id = models.ForeignKey(Student,on_delete=models.DO_NOTHING)
+    attendance_id =models.ForeignKey(Attendance, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.student_id.admin.first_name
 
 
 
