@@ -68,6 +68,8 @@ urlpatterns = [
     path('hod/Student/feedback', hod_views.STUDENT_FEEDBACK, name='get_student_feedback'),
     path('hod/Student/feedback/reply/save', hod_views.REPLY_STUDENT_FEEDBACK, name='reply_student_feedback'),
 
+    path('hod/View/Attendance', hod_views.VIEW_ATTENDANCE, name='view_attendance'),
+
     #this is staffs urls
     path('staff/Home', staff_views.HOME, name='staff_home'),
 
@@ -84,6 +86,9 @@ urlpatterns = [
     path('staff/Save_attendance', staff_views.STAFF_SAVE_ATTENDANCE, name='staff_save_attendance'),
     path('staff/View_Attendance', staff_views.STAFF_VIEW_ATTENDANCE, name='staff_view_attendance'),
 
+    path('staff/Add_Result', staff_views.STAFF_ADD_RESULT, name='staff_add_result'),
+    path('staff/Save_Result', staff_views.STAFF_SAVE_RESULT, name='staff_save_result'),
+
     #this is student urls
     path('student/Home', student_views.HOME, name='student_home'),
     path('student/Notifications', student_views.STUDENT_NOTIFICATION, name='student_notification'),
@@ -97,6 +102,5 @@ urlpatterns = [
 
     path('student/View_Attendance', student_views.STUDENT_VIEW_ATTENDANCE, name='student_view_attendance'),
 
-
-
+    path('student/View_Result', student_views.VIEW_RESULT, name='view_result')
     ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

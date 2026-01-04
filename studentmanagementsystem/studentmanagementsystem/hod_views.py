@@ -2,7 +2,7 @@ from django.db.models.fields import return_None
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import request
-from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification, Staff_Leave, Staff_Feedback, Student_Notification, Student_Feedback, Student_Leave
+from smsapp.models import Course, Batch_Year, CustomUser, Student, Staff, Subject, Staff_Notification, Staff_Leave, Staff_Feedback, Student_Notification, Student_Feedback, Student_Leave, Attendance, Attendance_Report
 from django.contrib import messages
 
 @login_required(login_url='/')
@@ -593,3 +593,34 @@ def SAVE_STUDENT_NOTIFICATION(request):
         return redirect('student_send_notification')
 
 
+def VIEW_ATTENDANCE(request):
+    subject = Subject.objects.all()
+    batch_year = Batch_Year.objects.all()
+
+    action = request.GET.get('action')
+    get_subject = None
+    get_batch_year = None
+    attendance_date = None
+    attendance_report = None
+    if action is not None:
+        if request.method == "POST":
+            subject_id = request.POST.get('subject_id')
+            batch_year_id = request.POST.get('batch_year_id')
+            attendance_date = request.POST.get('attendance_date')
+
+            get_subject = Subject.objects.get(id=subject_id)
+            get_batch_year = Batch_Year.objects.get(id=batch_year_id)
+            attendance = Attendance.objects.filter(subject_id=get_subject, attendance_date=attendance_date)
+            for i in attendance:
+                attendance_id = i.id
+                attendance_report = Attendance_Report.objects.filter(attendance_id=attendance_id)
+    context = {
+        'subject': subject,
+        'batch_year': batch_year,
+        'action': action,
+        'get_subject': get_subject,
+        'get_batch_year': get_batch_year,
+        'attendance_date': attendance_date,
+        'attendance_report': attendance_report,
+    }
+    return render(request,'hod/view_attendance.html', context)

@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
-from smsapp.models import Student, Student_Notification, Student_Feedback, Student_Leave, Subject, Attendance, Attendance_Report
+from smsapp.models import Student, Student_Notification, Student_Feedback, Student_Leave, Subject, Attendance, Attendance_Report, StudentResult
 
 
 
@@ -104,3 +104,19 @@ def STUDENT_VIEW_ATTENDANCE(request):
     }
 
     return render(request,'student/view_attendance.html',context)
+
+
+def VIEW_RESULT(request):
+    student = Student.objects.get(admin=request.user.id)
+    result = StudentResult.objects.filter(student_id=student)
+    mark = None
+    for i in result:
+        assignment_mark = i.assignment_mark
+        exam_mark = i.exam_mark
+        mark = assignment_mark + exam_mark
+        i.total = i.assignment_mark + i.exam_mark
+    context = {
+        'result': result,
+         'mark': mark,
+    }
+    return render(request, 'student/view_result.html', context)

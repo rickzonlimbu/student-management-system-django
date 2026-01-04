@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
-from smsapp.models import Staff, Student, Staff_Notification, Staff_Leave, Staff_Feedback, Batch_Year, Subject, Attendance, Attendance_Report
+from smsapp.models import Staff, Student, Staff_Notification, Staff_Leave, Staff_Feedback, Batch_Year, Subject, Attendance, Attendance_Report, StudentResult
 
 
 @login_required(login_url='/')
@@ -180,3 +180,70 @@ def STAFF_VIEW_ATTENDANCE(request):
         'attendance_report':attendance_report,
     }
     return render(request,'staff/view_attendance.html',context)
+
+
+def STAFF_ADD_RESULT(request):
+    staff = Staff.objects.get(admin = request.user.id)
+    subjects = Subject.objects.filter(staff_id = staff)
+    batch_year = Batch_Year.objects.all()
+    action = request.GET.get('action')
+
+    get_subject = None
+    get_batch_year=None
+    students = None
+
+    if action is not None:
+        if request.method == "POST":
+            subject_id = request.POST.get('subject_id')
+            batch_year_id = request.POST.get('batch_year_id')
+
+            get_subject = Subject.objects.get(id = subject_id)
+            get_batch_year = Batch_Year.objects.get(id = batch_year_id)
+
+            subjects = Subject.objects.filter(id = subject_id)
+            for i in subjects:
+                student_id = i.course.id
+                students = Student.objects.filter(course_id = student_id)
+
+    context = {
+        'subjects':subjects,
+        'batch_year':batch_year,
+        'action':action,
+        'get_subject':get_subject,
+        'get_batch_year':get_batch_year,
+        'students':students,
+    }
+    return render(request,'staff/add_result.html',context)
+
+
+def STAFF_SAVE_RESULT(request):
+    if request.method == "POST":
+        subject_id = request.POST.get('subject_id')
+        student_id = request.POST.get('student_id')
+        assignment_mark = request.POST.get('assignment_mark')
+        exam_mark = request.POST.get('exam_mark')
+
+        if not all([subject_id, student_id, assignment_mark, exam_mark]):
+            messages.error(request, "All fields are required")
+            return redirect('staff_add_result')
+
+        get_student = Student.objects.get(id=student_id)
+        get_subject = Subject.objects.get(id=subject_id)
+
+        result, created = StudentResult.objects.get_or_create(
+            student_id=get_student,
+            subject_id=get_subject,
+            defaults={
+                'assignment_mark': assignment_mark,
+                'exam_mark': exam_mark
+            }
+        )
+        if not created:
+            result.assignment_mark = assignment_mark
+            result.exam_mark = exam_mark
+            result.save()
+            messages.success(request, "Result has been updated successfully")
+        else:
+            messages.success(request, "Result has been added successfully")
+
+    return redirect('staff_add_result')
