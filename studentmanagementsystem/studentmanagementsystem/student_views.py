@@ -1,11 +1,25 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
-from smsapp.models import Student, Student_Notification, Student_Feedback, Student_Leave, Subject, Attendance, Attendance_Report, StudentResult
-
-
+from smsapp.models import Student, Student_Notification, Student_Feedback, Student_Leave, Subject, Attendance, Attendance_Report, StudentResult, Staff, Course
 
 def HOME(request):
-    return render(request,'student/home.html')
+    student_count = Student.objects.all().count()
+    staff_count = Staff.objects.all().count()
+    course_count = Course.objects.all().count()
+    subject_count = Subject.objects.all().count()
+
+    student_gender_male = Student.objects.filter(gender='Male').count()
+    student_gender_female = Student.objects.filter(gender='Female').count()
+
+    context = {
+        'student_count': student_count,
+        'staff_count': staff_count,
+        'course_count': course_count,
+        'subject_count': subject_count,
+        'student_gender_male': student_gender_male,
+        'student_gender_female': student_gender_female,
+    }
+    return render(request,'student/home.html',context)
 
 
 def STUDENT_NOTIFICATION(request):

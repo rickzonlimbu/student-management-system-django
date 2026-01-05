@@ -2,11 +2,11 @@
 <div class="header">
    <div class="header-left">
     <a href="#" class="logo">
-        <img src="{% static 'assets/img2/big.png' %}" alt="Logo">
+        <img src="{% static 'img2/big.png' %}" alt="Logo">
     </a>
 
     <a href="#" class="logo logo-small">
-        <img src="{% static 'assets/img2/big.png' %}" alt="Logo" width="30" height="30">
+        <img src="{% static 'img2/big.png' %}" alt="Logo" width="50" height="50">
     </a>
 </div>
             <a href="javascript:void(0);" id="toggle_btn">
@@ -19,10 +19,6 @@
             <i class="fas fa-bars"></i>
             </a>
             <ul class="nav user-menu">
-               <li class="nav-item dropdown noti-dropdown">
-                  <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <i class="far fa-bell"></i> <span class="badge badge-pill">3</span>
-                  </a>
                   <div class="dropdown-menu notifications">
                      <div class="topnav-dropdown-header">
                         <span class="notification-title">Notifications</span>
@@ -118,7 +114,6 @@
                         </div>
                      </div>
                      <a class="dropdown-item" href="{% url 'profile' %}">Update Profile</a>
-                     <a class="dropdown-item" href="inbox.html">Inbox</a>
                      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                   </div>
                </li>

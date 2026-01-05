@@ -1,12 +1,28 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
-from smsapp.models import Staff, Student, Staff_Notification, Staff_Leave, Staff_Feedback, Batch_Year, Subject, Attendance, Attendance_Report, StudentResult
+from smsapp.models import Staff, Student, Staff_Notification, Staff_Leave, Staff_Feedback, Batch_Year, Subject, Attendance, Attendance_Report, StudentResult, Course
 
 
 @login_required(login_url='/')
 def HOME(request):
-    return render(request,'staff/home.html')
+    student_count = Student.objects.all().count()
+    staff_count = Staff.objects.all().count()
+    course_count = Course.objects.all().count()
+    subject_count = Subject.objects.all().count()
+
+    student_gender_male = Student.objects.filter(gender='Male').count()
+    student_gender_female = Student.objects.filter(gender='Female').count()
+
+    context = {
+        'student_count': student_count,
+        'staff_count': staff_count,
+        'course_count': course_count,
+        'subject_count': subject_count,
+        'student_gender_male': student_gender_male,
+        'student_gender_female': student_gender_female,
+    }
+    return render(request,'staff/home.html', context)
 
 @login_required(login_url='/')
 def NOTIFICATION(request):
